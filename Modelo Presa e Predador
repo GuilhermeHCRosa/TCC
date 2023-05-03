@@ -1,0 +1,45 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Definindo os parâmetros do modelo
+a = 0.7  # taxa de crescimento dos coelhos
+b = 0.01 # taxa de mortalidade dos coelhos devido à predação das raposas
+c = 0.3  # taxa de mortalidade das raposas
+d = 0.005 # taxa de crescimento das raposas devido à predação dos coelhos
+
+# Definindo as condições iniciais
+R0 = 50 # população inicial de coelhos
+F0 = 10 # população inicial de raposas
+
+# Definindo o tempo de simulação
+T = 200 # tempo máximo de simulação
+dt = 0.1 # tamanho do passo de simulação
+
+# Inicializando as variáveis de simulação
+R = [R0] # vetor com a população de coelhos em cada instante de tempo
+F = [F0] # vetor com a população de raposas em cada instante de tempo
+t = [0] # vetor com os instantes de tempo simulados
+
+# Simulando a dinâmica das populações
+for i in range(int(T/dt)):
+    R_new = R[-1] + dt*(a*R[-1] - b*R[-1]*F[-1]) # variação da população de coelhos
+    F_new = F[-1] + dt*(-c*F[-1] + d*R[-1]*F[-1]) # variação da população de raposas
+    
+    # Garantindo que as populações não sejam negativas
+    if R_new < 0:
+        R_new = 0
+    if F_new < 0:
+        F_new = 0
+        
+    # Adicionando as novas populações e o novo instante de tempo aos vetores
+    R.append(R_new)
+    F.append(F_new)
+    t.append(t[-1] + dt)
+
+# Plotando o gráfico da dinâmica das populações
+plt.plot(t, R, label='Coelhos')
+plt.plot(t, F, label='Raposas')
+plt.xlabel('Tempo')
+plt.ylabel('População')
+plt.legend()
+plt.show()
